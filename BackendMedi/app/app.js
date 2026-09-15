@@ -9,7 +9,7 @@ app.use(express.urlencoded({extended : true}));
 const cors = require("cors");
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "https://medi-share-wine.vercel.app",
   credentials: true
 }));
 const routes = require("../routes/route");
