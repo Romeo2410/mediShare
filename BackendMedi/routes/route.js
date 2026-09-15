@@ -123,11 +123,7 @@ router.post("/login", async (req, res) => {
 });
 // SAVE PROFILE
 
-router.post(
-  "/donor/profile",
-   auth,
-  role(["Donor"]),
-  upload.fields([
+router.post("/donor/profile",auth,role(["Donor"]),upload.fields([
     { name: "profilePic", maxCount: 1 },
     { name: "aadhar", maxCount: 1 }
   ]),
@@ -164,93 +160,6 @@ router.post(
           message: "All fields are required"
         });
       }
-
-      // Name validation
-      if (!/^[A-Za-z ]+$/.test(name.trim())) {
-        return res.status(400).json({
-          message: "Name can contain only letters and spaces"
-        });
-      }
-
-      // Contact validation
-      if (!/^[0-9]{10}$/.test(contact)) {
-        return res.status(400).json({
-          message: "Contact must be exactly 10 digits"
-        });
-      }
-
-      // Occupation validation
-      if (!["Transporter", "Businessman", "Seller"].includes(occupation)) {
-        return res.status(400).json({
-          message: "Invalid occupation"
-        });
-      }
-
-      // Date validation
-      if (isNaN(new Date(dob).getTime())) {
-        return res.status(400).json({
-          message: "Invalid date of birth"
-        });
-      }
-
-      // Future DOB validation
-      if (new Date(dob) > new Date()) {
-        return res.status(400).json({
-          message: "Date of birth cannot be in the future"
-        });
-      }
-
-      // City validation
-      if (!/^[A-Za-z ]+$/.test(city.trim())) {
-        return res.status(400).json({
-          message: "City can contain only letters and spaces"
-        });
-      }
-      // State validation
-const indianStates = [
-  "Andhra Pradesh",
-  "Arunachal Pradesh",
-  "Assam",
-  "Bihar",
-  "Chhattisgarh",
-  "Goa",
-  "Gujarat",
-  "Haryana",
-  "Himachal Pradesh",
-  "Jharkhand",
-  "Karnataka",
-  "Kerala",
-  "Madhya Pradesh",
-  "Maharashtra",
-  "Manipur",
-  "Meghalaya",
-  "Mizoram",
-  "Nagaland",
-  "Odisha",
-  "Punjab",
-  "Rajasthan",
-  "Sikkim",
-  "Tamil Nadu",
-  "Telangana",
-  "Tripura",
-  "Uttar Pradesh",
-  "Uttarakhand",
-  "West Bengal",
-  "Andaman and Nicobar Islands",
-  "Chandigarh",
-  "Dadra and Nagar Haveli and Daman and Diu",
-  "Delhi",
-  "Jammu and Kashmir",
-  "Ladakh",
-  "Lakshadweep",
-  "Puducherry"
-];
-
-if (!indianStates.includes(state)) {
-  return res.status(400).json({
-    message: "Invalid state"
-  });
-}
 
       const profilePic = req.files?.profilePic?.[0];
       const aadhar = req.files?.aadhar?.[0];
@@ -391,93 +300,6 @@ if (
   });
 }
 
-// Name validation
-if (!/^[A-Za-z ]+$/.test(name.trim())) {
-  return res.status(400).json({
-    message: "Name can contain only letters and spaces"
-  });
-}
-
-// Contact validation
-if (!/^[0-9]{10}$/.test(contact)) {
-  return res.status(400).json({
-    message: "Contact must be exactly 10 digits"
-  });
-}
-
-// Occupation validation
-if (!["Transporter", "Businessman", "Seller"].includes(occupation)) {
-  return res.status(400).json({
-    message: "Invalid occupation"
-  });
-}
-
-// Date validation
-if (isNaN(new Date(dob).getTime())) {
-  return res.status(400).json({
-    message: "Invalid date of birth"
-  });
-}
-
-// Future DOB validation
-if (new Date(dob) > new Date()) {
-  return res.status(400).json({
-    message: "Date of birth cannot be in the future"
-  });
-}
-
-// City validation
-if (!/^[A-Za-z ]+$/.test(city.trim())) {
-  return res.status(400).json({
-    message: "City can contain only letters and spaces"
-  });
-}
-// State validation
-const indianStates = [
-  "Andhra Pradesh",
-  "Arunachal Pradesh",
-  "Assam",
-  "Bihar",
-  "Chhattisgarh",
-  "Goa",
-  "Gujarat",
-  "Haryana",
-  "Himachal Pradesh",
-  "Jharkhand",
-  "Karnataka",
-  "Kerala",
-  "Madhya Pradesh",
-  "Maharashtra",
-  "Manipur",
-  "Meghalaya",
-  "Mizoram",
-  "Nagaland",
-  "Odisha",
-  "Punjab",
-  "Rajasthan",
-  "Sikkim",
-  "Tamil Nadu",
-  "Telangana",
-  "Tripura",
-  "Uttar Pradesh",
-  "Uttarakhand",
-  "West Bengal",
-  "Andaman and Nicobar Islands",
-  "Chandigarh",
-  "Dadra and Nagar Haveli and Daman and Diu",
-  "Delhi",
-  "Jammu and Kashmir",
-  "Ladakh",
-  "Lakshadweep",
-  "Puducherry"
-];
-
-if (!indianStates.includes(state)) {
-  return res.status(400).json({
-    message: "Invalid state"
-  });
-}
-
       const profilePic = req.files?.profilePic?.[0];
       const aadhar = req.files?.aadhar?.[0];
 
@@ -552,11 +374,7 @@ if (!indianStates.includes(state)) {
 );
 
 // PUBLISH MEDICINE
-router.post(
-  "/medicine",
-  auth,
-  role(["Donor"]),
-  upload.single("image"),
+router.post("/medicine", auth, role(["Donor"]),upload.single("image"),
   async (req, res) => {
     try {
 
@@ -584,30 +402,6 @@ router.post(
       ) {
         return res.status(400).json({
           message: "All fields are required"
-        });
-      }
-
-      // Category validation
-      if (
-        !["Tablet", "Capsule", "Syrup", "Injection", "Other"]
-          .includes(category)
-      ) {
-        return res.status(400).json({
-          message: "Invalid medicine category"
-        });
-      }
-
-      // Condition validation
-      if (!["Sealed", "Opened"].includes(condition)) {
-        return res.status(400).json({
-          message: "Invalid medicine condition"
-        });
-      }
-
-      // Quantity validation
-      if (!Number.isInteger(Number(quantity)) || Number(quantity) <= 0) {
-        return res.status(400).json({
-          message: "Quantity must be a positive whole number"
         });
       }
 
@@ -733,10 +527,7 @@ const medicines = await Medicine.find(
 
   }
 });
-router.get(
-  "/medicine/edit/:id",
-  auth,
-  role(["Donor"]),
+router.get("/medicine/edit/:id", auth, role(["Donor"]),
   async (req, res) => {
 
     try {
@@ -921,30 +712,6 @@ if (medicine.donorEmail !== req.user.email) {
     ) {
       return res.status(400).json({
         message: "All fields are required"
-      });
-    }
-
-    // Category validation
-    if (
-      !["Tablet", "Capsule", "Syrup", "Injection", "Other"]
-        .includes(category)
-    ) {
-      return res.status(400).json({
-        message: "Invalid medicine category"
-      });
-    }
-
-    // Condition validation
-    if (!["Sealed", "Opened"].includes(condition)) {
-      return res.status(400).json({
-        message: "Invalid medicine condition"
-      });
-    }
-
-    // Quantity validation
-    if (!Number.isInteger(Number(quantity)) || Number(quantity) <= 0) {
-      return res.status(400).json({
-        message: "Quantity must be a positive whole number"
       });
     }
 
@@ -1269,11 +1036,7 @@ router.delete("/medicine/:id", auth, role(["Donor"]), async (req, res) => {
   }
 });
 // CREATE / UPDATE NEEDY PROFILE
-router.post(
-  "/needy/profile",
-  auth,
-  role(["Needy"]),
-  upload.single("idProof"),
+router.post("/needy/profile", auth, role(["Needy"]), upload.single("idProof"),
   async (req, res) => {
     try {
 
@@ -1303,79 +1066,6 @@ router.post(
           message: "All fields are required"
         });
       }
-
-      // Name validation
-      if (!/^[A-Za-z ]+$/.test(name.trim())) {
-        return res.status(400).json({
-          message: "Name can contain only letters and spaces"
-        });
-      }
-
-      // Contact validation
-      if (!/^[0-9]{10}$/.test(contact)) {
-        return res.status(400).json({
-          message: "Contact must be exactly 10 digits"
-        });
-      }
-
-      // User type validation
-      if (!["NGO", "Self"].includes(userType)) {
-        return res.status(400).json({
-          message: "Invalid user type"
-        });
-      }
-
-      // City validation
-      if (!/^[A-Za-z ]+$/.test(city.trim())) {
-        return res.status(400).json({
-          message: "City can contain only letters and spaces"
-        });
-      }
-      // State validation
-const indianStates = [
-  "Andhra Pradesh",
-  "Arunachal Pradesh",
-  "Assam",
-  "Bihar",
-  "Chhattisgarh",
-  "Goa",
-  "Gujarat",
-  "Haryana",
-  "Himachal Pradesh",
-  "Jharkhand",
-  "Karnataka",
-  "Kerala",
-  "Madhya Pradesh",
-  "Maharashtra",
-  "Manipur",
-  "Meghalaya",
-  "Mizoram",
-  "Nagaland",
-  "Odisha",
-  "Punjab",
-  "Rajasthan",
-  "Sikkim",
-  "Tamil Nadu",
-  "Telangana",
-  "Tripura",
-  "Uttar Pradesh",
-  "Uttarakhand",
-  "West Bengal",
-  "Andaman and Nicobar Islands",
-  "Chandigarh",
-  "Dadra and Nagar Haveli and Daman and Diu",
-  "Delhi",
-  "Jammu and Kashmir",
-  "Ladakh",
-  "Lakshadweep",
-  "Puducherry"
-];
-
-if (!indianStates.includes(state)) {
-  return res.status(400).json({
-    message: "Invalid state"
-  });
-}
 
       let idProof;
 

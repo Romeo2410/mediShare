@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Pill, UserRound, Mail, Lock, Users, Eye, EyeOff, Sparkles, ShieldCheck} from "lucide-react";
+import { Pill, UserRound, Mail, Lock, Users, Eye, EyeOff, Sparkles, ShieldCheck } from "lucide-react";
 import api from "../data/api";
 
 const Signup = () => {
@@ -9,11 +9,53 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [usertype, setUsertype] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const validateEmail = (value) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!value) {
+      setEmailError("Please enter a valid email address");
+    } else if (!emailPattern.test(value)) {
+      setEmailError("Please enter a valid email address");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const validatePassword = (value) => {
+
+    if (!value) {
+      setPasswordError("Password must be at least 8 characters");
+    } else if (value.length < 8) {
+      setPasswordError("Password must be at least 8 characters");
+    } else if (!/[A-Z]/.test(value)) {
+      setPasswordError("Password must contain at least one uppercase letter");
+    } else if (!/[a-z]/.test(value)) {
+      setPasswordError("Password must contain at least one lowercase letter");
+    } else if (!/[0-9]/.test(value)) {
+      setPasswordError("Password must contain at least one number");
+    } else {
+      setPasswordError("");
+    }
+
+  };
 
   const handleSignup = async (e) => {
 
     e.preventDefault();
+
+    if (!name.trim()) {
+      alert("Please enter your name");
+      return;
+    }
+
+    if (!usertype) {
+      alert("Please select account type");
+      return;
+    }
 
     try {
 
@@ -243,11 +285,17 @@ const Signup = () => {
                   type="email"
                   placeholder="Enter your email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {setEmail(e.target.value);
+                  validateEmail(e.target.value);}}
                   className="w-full border border-gray-200 rounded-xl py-3.5 pl-11 pr-4 outline-none bg-gray-50/50 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-100 transition"
                 />
 
               </div>
+              {emailError && (
+                <p className="text-xs text-rose-500 mt-1.5">
+                  {emailError}
+                </p>
+              )}
 
             </div>
 
@@ -268,9 +316,9 @@ const Signup = () => {
                   type={showPassword ? "text" : "password"}
                   placeholder="Create a password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full border border-gray-200 rounded-xl py-3.5 pl-11 pr-11 outline-none bg-gray-50/50 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition"
-                />
+                  onChange={(e) => {setPassword(e.target.value);
+                  validatePassword(e.target.value);}}
+                  className="w-full border border-gray-200 rounded-xl py-3.5 pl-11 pr-11 outline-none bg-gray-50/50 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition"/>
 
                 <button
                   type="button"
@@ -287,6 +335,11 @@ const Signup = () => {
                 </button>
 
               </div>
+              {passwordError && (
+                <p className="text-xs text-rose-500 mt-1.5">
+                  {passwordError}
+                </p>
+              )}
 
             </div>
 
