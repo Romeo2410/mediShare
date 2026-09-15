@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:2003/api"
+  baseURL: "https://medishare-backend-p8tg.onrender.com/api"
 });
 
 api.interceptors.request.use((config) => {
